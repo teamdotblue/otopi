@@ -2,7 +2,7 @@ name: Check patch
 
 on:
   push:
-    branches: [master]
+    branches: [master, centos10-update]
   pull_request:
     branches: [master]
 
@@ -13,12 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: centos-stream-8
-            shortcut: cs8
-            container-name: el8stream
           - name: centos-stream-9
             shortcut: cs9
             container-name: el9stream
+          - name: centos-stream-10
+            shortcut: cs10
+            container-name: el10stream
     name: ${{ matrix.name }}
     container:
       image: quay.io/ovirt/buildcontainer:${{ matrix.container-name }}
@@ -61,6 +61,6 @@ jobs:
       run: automation/run-checks.sh
 
     - name: Upload artifacts
-      uses: ovirt/upload-rpms-action@v2
+      uses: ovirt/upload-rpms-action@main
       with:
         directory: ${{ env.ARTIFACTS_DIR }}
